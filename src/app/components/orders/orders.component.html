@@ -1,0 +1,17 @@
+<div *ngIf="customer">
+  <div class="card card-body mb-3">
+    <div *ngFor="let order of customer.orders">
+      <div class="row card-group">
+        <div>
+          <a (click)="editOrder(order.id)">
+            <u>edit/delete</u>
+          </a>
+        </div>
+        <div class="col-1" *ngFor="let item of order.item">
+          <img class="card-img-top img-fluid" src="../../../assets/images/{{item.name}}.png" alt="{{item.name}}"> {{ item.count }}
+        </div>
+      </div>
+    </div>
+<app-order [customerid]="customer.id" [orderid]="orderid" (parback)="callBack($event)"></app-order>
+  </div>
+</div>

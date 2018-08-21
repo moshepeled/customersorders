@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xl-6 mt-3">
+      <h1>Orders List</h1>
+    </div>
+    <div class="col-xl-6">
+
+    </div>
+    <div class="col-xl-6">
+      <ul class="list-unstyled">
+        <li class="card card-group mb-2" *ngFor="let order of orders">
+          <div *ngIf="order.item.length > 0">
+<h4>{{ order.id | date:'dd/MM/yyyy HH:mm:ss' }}
+              <small>
+                <button (click)="onClickEdit(order.customerid)" class="btn btn-dark btn-sm">
+                  <u>Edit</u>
+                </button>
+              </small>
+            </h4>
+            <div class="row ml-2">
+              <div *ngFor="let item of order.item">
+                <img width="17px" height="17px" src="../../../assets/images/{{item.name}}.png" alt="{{item.name}}"> {{ item.count }}
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xl-6">
+      <app-customer [customerid]="selectedID"></app-customer>
+    </div>
+
+    <div class="col-xl-6">
+
+    </div>
+
+
+    <div class="col-xl-6">
+<app-orders [customerid]="selectedID" (parback)="callBack($event)"></app-orders>
+    </div>
+  </div>
+</div>

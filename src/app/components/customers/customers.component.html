@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+<div class="col-xl-6  mt-3">
+      <h1>Customer List</h1>
+    </div>
+    <div class="col-xl-6">
+
+    </div>
+    <div class="col-xl-6">
+      <ul class="list-unstyled">
+        <li class="card card-body mb-2" *ngFor="let cust of customers" [class.bg-light]="cust.isActive">
+          <h3>{{ cust.id }}: {{ cust.firstName }} {{ cust.lastName }}
+            <small>
+              <button (click)="selectedID = cust.id" class="btn btn-dark btn-sm">
+                <u>Edit</u>
+              </button>
+            </small>
+          </h3>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xl-6">
+<app-customer [customerid]="selectedID" (parback)="callBack($event)"></app-customer>
+    </div>
+
+    <div class="col-xl-6">
+
+    </div>
+
+
+    <div class="col-xl-6">
+      <app-orders [customerid]="selectedID" ></app-orders>
+    </div>
+  </div>
+</div>
