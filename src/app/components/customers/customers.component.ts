@@ -23,6 +23,7 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit() {
     this.customers = this.localstorage.getAllItems();
+    console.log(this.customers);
   }
 
   onSubmit({ value, valid }: { value: Customer; valid: boolean }) {

@@ -21,6 +21,7 @@ export class OrderlistComponent implements OnInit {
 
   arrangOrders() {
     this.customers = this.localstorage.getAllItems();
+    console.log(this.customers);
     this.orders = [];
     this.customers.forEach(element => {
       if (element.orders) {
