@@ -1,44 +1,42 @@
-<div *ngIf="customerid">
-  <div>
-    <h2>Order</h2>
-  </div>
-  <div class="form-group">
-    <div class="container">
-      <div class="row card-group">
-        <div class="col-2" *ngFor="let item of items">
-          <!-- <div class="col-md-3 col-sm-3 col-xs-6"> -->
-          <!-- <div class="card"> -->
-<input name="items" [(ngModel)]="item.count" type="number" min="0" max="9" step="1" value=item.value>
-          <img class="card-img-top img-fluid" src="../../../assets/images/{{item.name}}.png" alt="{{item.name}}">
-        </div>
-        <!-- </div> -->
-        <!-- </div> -->
+<div>
+  <h2>Order</h2>
+</div>
+<div class="form-group">
+  <div class="container">
+    <div class="row card-group">
+      <div class="col-2" *ngFor="let item of items">
+        <!-- <div class="col-md-3 col-sm-3 col-xs-6"> -->
+        <!-- <div class="card"> -->
+        <input name="items" [(ngModel)]="item.count" type="number" min="0" max="9" step="1" value=item.value>
+        <img class="card-img-top img-fluid" src="../../../assets/images/{{item.name}}.png" alt="{{item.name}}">
       </div>
+      <!-- </div> -->
+      <!-- </div> -->
     </div>
+  </div>
 
-    <div class="container mt-5">
-      <div class="row">
-        <a (click)="addOrder()" class="btn btn-primary a-btn-slide-text ml-5">
+  <div class="container mt-5">
+    <div class="row">
+      <a (click)="addOrder()" class="btn btn-primary a-btn-slide-text ml-5">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        <span>
+          <strong>Add</strong>
+        </span>
+      </a>
+      <div *ngIf="_orderid">
+        <a (click)="saveOrder()" class="btn btn-primary a-btn-slide-text ml-5">
           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
           <span>
-            <strong>Add</strong>
+            <strong>Save</strong>
           </span>
         </a>
-        <div *ngIf="_orderid">
-<a (click)="saveOrder()" class="btn btn-primary a-btn-slide-text ml-5">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            <span>
-              <strong>Save</strong>
-            </span>
-          </a>
 
-<a (click)="delOrder()" class="btn btn-primary a-btn-slide-text ml-5">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            <span>
-              <strong>Delete</strong>
-            </span>
-          </a>
-        </div>
+        <a (click)="delOrder()" class="btn btn-primary a-btn-slide-text ml-5">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          <span>
+            <strong>Delete</strong>
+          </span>
+        </a>
       </div>
     </div>
   </div>

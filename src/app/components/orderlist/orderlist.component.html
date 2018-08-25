@@ -12,7 +12,7 @@
           <div *ngIf="order.item.length > 0">
 <h4>{{ order.id | date:'dd/MM/yyyy HH:mm:ss' }}
               <small>
-                <button (click)="onClickEdit(order.customerid)" class="btn btn-dark btn-sm">
+                <button (click)="onClickEdit(order)" class="btn btn-dark btn-sm">
                   <u>Edit</u>
                 </button>
               </small>
@@ -27,7 +27,7 @@
       </ul>
     </div>
     <div class="col-xl-6">
-      <app-customer [customerid]="selectedID"></app-customer>
+      <app-customer [customer]="customer"></app-customer>
     </div>
 
     <div class="col-xl-6">
@@ -35,8 +35,12 @@
     </div>
 
 
-    <div class="col-xl-6">
-<app-orders [customerid]="selectedID" (parback)="callBack($event)"></app-orders>
+    <!-- <div class="col-xl-6">
+<app-orders [orderids]="orders"></app-orders>
+    </div> -->
+
+    <div class="col-xl-6" *ngIf="customer">
+        <app-orders [orderids]="customer.orders" [customerid]="customer.id" ></app-orders>
     </div>
   </div>
 </div>

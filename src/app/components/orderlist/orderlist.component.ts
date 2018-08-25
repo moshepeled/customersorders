@@ -11,7 +11,7 @@ import { Order } from '../../shared/order';
 export class OrderlistComponent implements OnInit {
   customers: Array<Customer>;
   orders: Array<Order> = [];
-  selectedID = 0;
+  customer: Customer;
 
   constructor(private localstorage: LocalStorageService) {}
 
@@ -20,17 +20,18 @@ export class OrderlistComponent implements OnInit {
   }
 
   arrangOrders() {
-    this.customers = this.localstorage.getAllItems();
-    console.log(this.customers);
-    this.orders = [];
-    this.customers.forEach(element => {
-      if (element.orders) {
-        element.orders.forEach(ord => {
-          // console.log(ord);
-          this.orders.push(ord);
-        });
-      }
-    });
+    // this.customers = this.localstorage.getAllItems();
+    // console.log(this.customers);
+    // this.orders = [];
+    // this.customers.forEach(element => {
+    //   if (element.orders) {
+    //     element.orders.forEach(ord => {
+    //       // console.log(ord);
+    //       // this.orders.push(ord);
+    //     });
+    //   }
+    // });
+    this.orders = this.localstorage.getAllOrders();
     this.orders.sort(
       (a, b): number => {
         if (Number(a.id) > Number(b.id)) {
@@ -44,8 +45,10 @@ export class OrderlistComponent implements OnInit {
     );
   }
 
-  onClickEdit(customerid) {
-    this.selectedID = customerid;
+  onClickEdit(order: Order) {
+    this.customer = this.localstorage.getCustomer(order.customerid);
+    console.log(this.customer);
+    
   }
 
   callBack(data: string) {

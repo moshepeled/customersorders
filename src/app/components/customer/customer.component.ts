@@ -1,18 +1,22 @@
 import { Component, OnInit, OnChanges, ViewChild, Input, EventEmitter, Output } from '@angular/core';
 import { Customer } from '../../shared/customer';
-import { LocalStorageService } from '../../models/local-storage.service';
+import { CustomerService } from '../../services/customer.service';
+
 
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
   styleUrls: ['./customer.component.css']
 })
-export class CustomerComponent implements OnInit, OnChanges {
-  @Input()
-  customerid: string;
+export class CustomerComponent implements OnInit {
 
-  @Output()
-  parback: EventEmitter<string> = new EventEmitter<string>();
+  _customer: Customer;
+
+  @Input()
+  set customer(customer: Customer) {
+    this._customer = customer;
+    this.newcustomer = customer;
+  }
 
   customers: Array<Customer>;
   showUserForm = true;
@@ -22,50 +26,27 @@ export class CustomerComponent implements OnInit, OnChanges {
   form: any;
 
   newcustomer: Customer;
-  constructor(private localstorage: LocalStorageService) {
-    this.customerid = '0';
+  constructor(private customerService: CustomerService) {
+    
   }
 
   ngOnInit() {
     this.clearCustomer();
   }
 
-  ngOnChanges() {
-    if (this.customerid !== '0') {
-      this.newcustomer = this.localstorage.getItem(this.customerid);
-    } else {
-      this.clearCustomer();
-    }
-  }
-
   clearCustomer() {
     this.newcustomer = new Customer();
   }
-  onSubmit({ value, valid }: { value: Customer; valid: boolean }) {
-    if (!valid) {
-      console.log('Form is not valid');
-    } else {
-      this.lastID += 1;
-      value.isActive = true;
-      value.hide = true;
-      value.id = this.lastID;
-      this.customers.unshift(value);
-      this.localstorage.setItem(value.id.toString(), value);
-      this.form.reset();
-    }
-  }
-
+  
   addCutomer(custForm) {
+
     if (!custForm.form.valid) {
       this.showFillMesssage = true;
     } else {
       this.newcustomer.orders = [];
-      console.log(this.newcustomer);
-      this.localstorage.addItem(this.newcustomer);
+      this.customerService.sendCustomer(new Customer(this.newcustomer));
       custForm.form.reset();
       this.showFillMesssage = false;
-      this.clearCustomer();
-      this.callBack('add');
     }
   }
 
@@ -73,33 +54,26 @@ export class CustomerComponent implements OnInit, OnChanges {
     if (!custForm.form.valid) {
       this.showFillMesssage = true;
     } else {
-      console.log(this.newcustomer);
-      this.localstorage.setItem(
-        this.newcustomer.id.toString(),
-        this.newcustomer
-      );
+      this.customerService.sendCustomer(new Customer(this.newcustomer));
+
       custForm.form.reset();
       this.showFillMesssage = false;
       this.clearCustomer();
-      this.callBack('update');
+      
     }
-  }
-
-  getCutomer(custForm) {
-    this.newcustomer = this.localstorage.getItem(this.customerid);
   }
 
   deleteCutomer(custForm) {
     if (confirm('Are you sure to delete ?')) {
-      this.localstorage.removeItem(this.customerid);
+      // this.localstorage.removeItem(this.customerid);
       custForm.form.reset();
       this.showFillMesssage = false;
+      
+      this._customer = new Customer();
+      this._customer.id = this.newcustomer.id;
+      this.customerService.deleteCustomer(this._customer);
       this.clearCustomer();
-      this.callBack('delete');
     }
   }
 
-  callBack(data: string) {
-    this.parback.emit(data);
-  }
 }

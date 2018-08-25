@@ -1,43 +1,78 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Order } from '../../shared/order';
 import { LocalStorageService } from '../../models/local-storage.service';
-import { Customer } from '../../shared/customer';
+import { Subscription } from 'rxjs';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css']
 })
-export class OrdersComponent implements OnInit {
+export class OrdersComponent implements OnInit, OnDestroy {
+  
   order: Order;
-  orderid: string;
-  orders: Order[] = [];
-  customer: Customer;
-  _customerid;
-
-  @Output()
-  parback: EventEmitter<string> = new EventEmitter<string>();
+  _orders: Order[] = [];
+  custorders: Order[] = [];
+  subscription: Subscription;
+  _customerid: number;
+  
+  @Input()
+  set customerid(customerid: number) {
+    this._customerid = customerid;
+  }
 
   @Input()
-  set customerid(customerid: string) {
-    if (customerid !== '0') {
-      this._customerid = customerid;
-      this.customer = this.localstorage.getItem(customerid);
-    }
+  set orderids(orderids: String[]) {
+    // this._orders = orders;
+    // console.log('_orders:');
+    // console.log(this._orders);
+    this._orders = this.ls.getCustomerOrders(orderids);
+    console.log('_orders:');
+    console.log(this._orders);
   }
 
-  constructor(private localstorage: LocalStorageService) {}
+  constructor(private ls: LocalStorageService
+    , private orderService: OrderService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.subscription = this.orderService.getOrder().subscribe(ord => {
+      console.log('in orders subscribe');
+      console.log(ord);
+      // console.log(this._orders);
+      if (!ord.customerid) { // new order
+        ord.customerid = this._customerid;
+        console.log('addOrder:');
+        console.log(ord);
+        this.ls.addOrder(ord);
+        return;
+      }
 
-  editOrder(id) {
-    console.log(this.customerid);
-    this.orderid = id;
+      if (ord.item.length > 0) { // update
+        this.ls.saveOrder(ord);
+        return;
+      } else {
+        this.ls.delOrder(ord);
+        this._orders = this._orders.filter(o => o.id !== ord.id);
+      }
+
+
+    })
   }
 
-  callBack(data: string) {
-    console.log('orders ' + data);
-    this.customer = this.localstorage.getItem(this._customerid);
-    this.parback.emit(data);
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
+
+  editOrder(order: Order) {
+    console.log('click ');
+    console.log(order);
+    this.order = order;
+  }
+
+  // callBack(data: string) {
+  //   console.log('orders ' + data);
+  //   this.customer = this.localstorage.getItem(this._customerid);
+  //   this.parback.emit(data);
+  // }
 }

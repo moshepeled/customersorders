@@ -1,6 +1,5 @@
 export class Item {
   name: string;
-  // itemId: string;
   count: number;
 }
 
@@ -9,9 +8,8 @@ export class Order {
          customerid: number;
          item: Array<Item> = [];
 
-         constructor(id, customerid) {
-           this.id = id;
-           this.customerid = customerid;
+         constructor(order: Order) {
+            Object.assign(this, order);
          }
 
          additem(item: Item) {
