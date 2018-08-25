@@ -20,17 +20,6 @@ export class OrderlistComponent implements OnInit {
   }
 
   arrangOrders() {
-    // this.customers = this.localstorage.getAllItems();
-    // console.log(this.customers);
-    // this.orders = [];
-    // this.customers.forEach(element => {
-    //   if (element.orders) {
-    //     element.orders.forEach(ord => {
-    //       // console.log(ord);
-    //       // this.orders.push(ord);
-    //     });
-    //   }
-    // });
     this.orders = this.localstorage.getAllOrders();
     this.orders.sort(
       (a, b): number => {

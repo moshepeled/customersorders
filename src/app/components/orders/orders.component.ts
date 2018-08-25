@@ -24,9 +24,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   @Input()
   set orderids(orderids: String[]) {
-    // this._orders = orders;
-    // console.log('_orders:');
-    // console.log(this._orders);
     this._orders = this.ls.getCustomerOrders(orderids);
     console.log('_orders:');
     console.log(this._orders);
@@ -37,14 +34,17 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.orderService.getOrder().subscribe(ord => {
-      console.log('in orders subscribe');
-      console.log(ord);
-      // console.log(this._orders);
       if (!ord.customerid) { // new order
         ord.customerid = this._customerid;
         console.log('addOrder:');
         console.log(ord);
         this.ls.addOrder(ord);
+        if (this._orders) {
+          this._orders.push(ord);
+        } else {
+          this._orders =[];
+          this._orders.push(ord);
+        }
         return;
       }
 
@@ -55,7 +55,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
         this.ls.delOrder(ord);
         this._orders = this._orders.filter(o => o.id !== ord.id);
       }
-
 
     })
   }
@@ -69,10 +68,4 @@ export class OrdersComponent implements OnInit, OnDestroy {
     console.log(order);
     this.order = order;
   }
-
-  // callBack(data: string) {
-  //   console.log('orders ' + data);
-  //   this.customer = this.localstorage.getItem(this._customerid);
-  //   this.parback.emit(data);
-  // }
 }
