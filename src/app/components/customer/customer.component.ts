@@ -71,6 +71,7 @@ export class CustomerComponent implements OnInit {
       
       this._customer = new Customer();
       this._customer.id = this.newcustomer.id;
+      this._customer.orders = this.newcustomer.orders;
       this.customerService.deleteCustomer(this._customer);
       this.clearCustomer();
     }

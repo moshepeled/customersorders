@@ -27,12 +27,30 @@ export class LocalStorageService {
     return values
   }
 
-  delCustomer(customer) {
+  delCustomer(customer: Customer) {
+    console.log('delCustomer');
+    
+    let orders = JSON.parse(localStorage.getItem(this.dbOrders));
+    if (orders) {
+      console.log(customer.orders.length);
+      console.log(customer);
+      if (customer.orders.length > 0) {
+        customer.orders.forEach(element => {
+          console.log(element);
+          
+          orders = orders.filter(order => order.id !== element);
+        });
+        localStorage.setItem(this.dbOrders, JSON.stringify(orders));
+      }
+    }
+
     let customers = JSON.parse(localStorage.getItem(this.dbCustomers));
     if (customers) {
       customers = customers.filter(data => data.id !== customer.id);
       localStorage.setItem(this.dbCustomers, JSON.stringify(customers));
     }
+
+    
   }
 
   saveCustomer(customer) {
@@ -60,6 +78,7 @@ export class LocalStorageService {
       customers.push(customer);
     } else {
       customer.id = 1;
+      customers = [];
       customers.push(customer);
     }
     localStorage.setItem(this.dbCustomers, JSON.stringify(customers));
